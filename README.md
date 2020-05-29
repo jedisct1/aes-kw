@@ -12,7 +12,7 @@ This is a NIST-blessed construction. Other than that, AES-KW is inefficient and 
 
 The code uses AES-NI, so you may have to add `-maes` or `-march=native` to your compilation flags.
 
-### Wrapping:
+### Key wrapping:
 
 ```c
 int aes_kw_wrap(unsigned char *padded_out, size_t padded_out_len, const unsigned char *in,
@@ -27,7 +27,7 @@ The encrypted key is put into `padded_out`, whose length is `padded_out_len`.
 
 The function returns `0` on success, `-1` or error.
 
-### Unwrapping:
+### Key unwrapping:
 
 ```c
 int aes_kw_unwrap(unsigned char *out, size_t out_len, size_t padded_out_len,
