@@ -1,12 +1,12 @@
 # A standalone AES-KW with padding (RFC 3394 / RFC 5649) implementation
 
-This is a NIST-blessed construction. Other than that, AES-KW is inefficient and generally not useful.
+This is a NIST-blessed construction. Other than that, AES-KW is inefficient and is generally not very useful.
 
 ## Usage
 
 The code uses AES-NI, so you may have to add `-maes` or `-march=native` to your compilation flags.
 
-Wrapping:
+### Wrapping:
 
 ```c
 int aes_kw_wrap(unsigned char *padded_out, size_t padded_out_len, const unsigned char *in,
@@ -17,11 +17,11 @@ Encrypts a key `in` of length `in_len` bytes using the AES key `key` of size `ae
 
 The encrypted key is put into `padded_out`, whose length is `padded_out_len`.
 
-`padded_out_len` must be at least `aes_kw_MACBYTES` (8 bytes) larger than the input. Extra space is needed if the wrapped key size is not a multiple of 8 bytes, but these are virtually nonexistent in the real world.
+`padded_out_len` must be `aes_kw_MACBYTES` (8 bytes) larger than the input. Extra space is needed if the wrapped key size is not a multiple of 8 bytes, but this case is virtually nonexistent in the real world.
 
 The function returns `0` on success, `-1` or error.
 
-Unwrapping:
+### Unwrapping:
 
 ```c
 int aes_kw_unwrap(unsigned char *out, size_t out_len, size_t padded_out_len,
