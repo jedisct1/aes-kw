@@ -1,4 +1,4 @@
-# A standalone AES-KW with padding (RFC 3394 / RFC 5649) implementation
+# A standalone AES-KW (RFC 3394 / RFC 5649) implementation
 
 This is a NIST-blessed construction. Other than that, AES-KW is inefficient and is generally not very useful.
 
