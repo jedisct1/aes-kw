@@ -76,12 +76,21 @@ store64_be(unsigned char dst[4], uint64_t w)
         t1                = _mm_xor_si128(t1, _mm_shuffle_epi32(s, 0xff)); \
     } while (0)
 
-#define DRC2(ROUND, RC)                                                    \
+#define DRC1(ROUND, RC)                                                    \
     do {                                                                   \
         s                 = _mm_aeskeygenassist_si128(t2, (RC));           \
         round_keys[ROUND] = t2;                                            \
-        t2                = _mm_xor_si128(t2, _mm_slli_si128(t1, 4));      \
-        t2                = _mm_xor_si128(t2, _mm_slli_si128(t1, 8));      \
+        t1                = _mm_xor_si128(t1, _mm_slli_si128(t1, 4));      \
+        t1                = _mm_xor_si128(t1, _mm_slli_si128(t1, 8));      \
+        t1                = _mm_xor_si128(t1, _mm_shuffle_epi32(s, 0xff)); \
+    } while (0)
+
+#define DRC2(ROUND, RC)                                                    \
+    do {                                                                   \
+        s                 = _mm_aeskeygenassist_si128(t1, (RC));           \
+        round_keys[ROUND] = t1;                                            \
+        t2                = _mm_xor_si128(t2, _mm_slli_si128(t2, 4));      \
+        t2                = _mm_xor_si128(t2, _mm_slli_si128(t2, 8));      \
         t2                = _mm_xor_si128(t2, _mm_shuffle_epi32(s, 0xaa)); \
     } while (0)
 
@@ -132,19 +141,19 @@ _aes_key_expand_256(__m128i round_keys[AES_ROUNDS + 1], __m128i t1, __m128i t2)
     __m128i s;
 
     round_keys[0] = t1;
-    DRC(1, 1);
+    DRC1(1, 1);
     DRC2(2, 1);
-    DRC(3, 2);
+    DRC1(3, 2);
     DRC2(4, 2);
-    DRC(5, 4);
+    DRC1(5, 4);
     DRC2(6, 4);
-    DRC(7, 8);
+    DRC1(7, 8);
     DRC2(8, 8);
-    DRC(9, 16);
+    DRC1(9, 16);
     DRC2(10, 16);
-    DRC(11, 32);
+    DRC1(11, 32);
     DRC2(12, 32);
-    DRC(13, 64);
+    DRC1(13, 64);
     round_keys[14] = t1;
 }
 
